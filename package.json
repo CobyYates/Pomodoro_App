@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
+    "vue2-flip-countdown": "^0.9.3",
+    "vuemodoro": "^1.0.2",
     "vuetify": "^2.2.11"
   },
   "devDependencies": {
