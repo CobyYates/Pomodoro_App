@@ -10,18 +10,28 @@
               <span id="middle">:</span>
               <span id="seconds">{{ getSeconds() }}</span>
             </div>
+            <span id="type" class="display-1"> {{ getType() }}</span>
 
-            <div id="buttons">
-              <button id="start" v-if="!timer" @click="playPause()">
+            <div id="buttons" width="200px">
+              <button
+                id="start"
+                class="mx-3 my-3"
+                v-if="!timer"
+                @click="playPause()"
+              >
                 <v-icon x-large color="green">mdi-play-circle-outline</v-icon>
               </button>
 
-              <button id="stop" v-if="timer" @click="pause()">
+              <button id="stop" class="mx-3 my-3" v-if="timer" @click="pause()">
                 <v-icon x-large color="green">mdi-pause-circle-outline</v-icon>
               </button>
 
-              <button id="reset" @click="reset()">
+              <button id="reset" class="mx-3 my-3" @click="reset()">
                 <v-icon x-large color="orange">mdi-undo-variant</v-icon>
+              </button>
+
+              <button id="reset" class="mx-3 my-3" @click="complete()">
+                <v-icon x-large color="red">mdi-clock-end</v-icon>
               </button>
             </div>
           </div>
@@ -97,7 +107,14 @@ export default {
   data: () => ({
     dialog: false,
     defaultTime: 60 * 25,
+    defaultBreak: 60 * 5,
+    pomodoro: true,
+    longBreak: 60 * 20,
+    break: false,
+    breakStart: false,
+    pomodoroCount: 0,
     time: 0,
+    completeTime: 0,
     timer: null,
     headers: [
       { text: "", value: `checkbox`, sortable: false },
@@ -128,7 +145,6 @@ export default {
   created() {
     this.initialize();
     this.time = this.defaultTime;
-    // this.$vuetify.theme.blue = true
   },
   methods: {
     formatNumber(num) {
@@ -140,8 +156,11 @@ export default {
     getSeconds() {
       return this.formatNumber(this.time % 60);
     },
-    playPause(id) {
-      console.log(id);
+    getType() {
+      return this.pomodoro ? "Task" : "Break";
+    },
+    playPause() {
+      // console.log(`ID ${id}`);
       if (!this.timer) {
         this.play();
       } else {
@@ -160,7 +179,38 @@ export default {
       this.timer = null;
     },
     reset() {
-      this.time = this.defaultTime;
+      this.break
+        ? (this.time = this.defaultBreak)
+        : (this.time = this.defaultTime);
+    },
+    complete() {
+      this.pomodoro = !this.pomodoro;
+      !this.pomodoro
+        ? this.$store.state.pomodoroCount++
+        : this.$store.state.pomodoroCount;
+      if (this.$store.state.pomodoroCount === 4) {
+        this.playPause();
+        this.time = 60 * 20;
+        this.$store.state.pomodoroCount = 0;
+        console.log(this.pomodoro);
+      } else {
+        this.pomodoro
+          ? (this.time = this.defaultTime)
+          : (this.time = this.defaultBreak);
+        console.log(this.pomodoro);
+      }
+
+      // console.log(this.pomodoro)
+      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
+      this.playPause();
+    },
+    addBreak() {
+      // this.time = this.defaultBreak
+      // this.$store.state.pomodoroCount++
+      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
+    },
+    startBreak() {
+      // this.time = this.defaultBreak
     },
     getPlayState() {
       return !!this.timer;
@@ -169,35 +219,35 @@ export default {
       this.clients = [
         {
           todo: "As a user I want to be able to add and remove tasks.",
-          count: 0,
+          count: 0
         },
         {
           todo:
             "As a user I want to be able to select a task and start a Pomodoro timer.",
-          count: 0,
+          count: 0
         },
         {
           todo: "As a user I want to be able to pause the timer.",
-          count: 0,
+          count: 0
         },
         {
           todo: "As a user I want to be able to reset the timer.",
-          count: 0,
+          count: 0
         },
         {
           todo:
             "As a user I want to know how many pomodoros have been completed for a selected task.",
-          count: 0,
+          count: 0
         },
         {
           todo:
             "As a user I want to be able to take a 5 min break after a Pomodoro.",
-          count: 0,
+          count: 0
         },
         {
           todo:
             "As a user I want to be able to take a 20 min break after 4 pomodoros.",
-          count: 0,
+          count: 0
         }
       ];
     },
@@ -236,10 +286,10 @@ export default {
 
 <style>
 v-container {
-  background-color: #666!important;
+  background-color: #666 !important;
 }
 .test {
-  border-radius: 30px;
+  border-radius: 0;
   background: linear-gradient(145deg, #5bc6ff, #4da7db);
   box-shadow: 5px 5px 14px #479aca, -5px -5px 14px #63d8ff;
 }
