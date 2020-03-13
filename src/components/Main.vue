@@ -1,6 +1,7 @@
 <template>
   <v-container class="text-center pt-0">
-    <h1 class="text-center py-6 font-weight-light">Pomodoro Tasks</h1>
+    <h1 class="text-center pt-6 mb-0 pb-0 font-weight-light">Pomodoro Tasks</h1>
+    <p class="mt-0 pt-0">Completed Pomodoros today {{this.$store.state.totalPomodoros}}</p>
     <div>
       <section id="app" class="hero is-info is-fullheight is-bold">
         <div class="hero-body">
@@ -42,7 +43,7 @@
       <v-col cols="12">
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <template v-slot:activator="{ on }">
-            <v-btn dark class="mb-2 test" width="150" v-on="on">
+            <v-btn dark x-large class="mb-2 elevation-6" color="primary" width="150" v-on="on">
               Add Task
             </v-btn>
           </template>
@@ -65,7 +66,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" @click="save" dark>Add</v-btn>
+              <v-btn color="blue darken-1" @click="save" dark>Update</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -129,7 +130,8 @@ export default {
       todo: ""
     },
     defaultItem: {
-      todo: ""
+      todo: "",
+      count: 0
     }
   }),
   computed: {
@@ -181,28 +183,29 @@ export default {
     reset() {
       this.break
         ? (this.time = this.defaultBreak)
-        : (this.time = this.defaultTime);
+        : (this.time = this.defaultTime)
+        this.playPause();
     },
     complete() {
       this.pomodoro = !this.pomodoro;
-      !this.pomodoro
-        ? this.$store.state.pomodoroCount++
-        : this.$store.state.pomodoroCount;
+      if(!this.pomodoro) {
+        this.$store.state.pomodoroCount++
+        this.$store.state.totalPomodoros++
+      }
       if (this.$store.state.pomodoroCount === 4) {
-        this.playPause();
+        // this.playPause();
         this.time = 60 * 20;
         this.$store.state.pomodoroCount = 0;
         console.log(this.pomodoro);
       } else {
         this.pomodoro
           ? (this.time = this.defaultTime)
-          : (this.time = this.defaultBreak);
+          : (this.time = this.defaultBreak)
+          // this.playPause();
         console.log(this.pomodoro);
       }
-
-      // console.log(this.pomodoro)
-      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
       this.playPause();
+      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
     },
     addBreak() {
       // this.time = this.defaultBreak
@@ -219,35 +222,42 @@ export default {
       this.clients = [
         {
           todo: "As a user I want to be able to add and remove tasks.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo:
             "As a user I want to be able to select a task and start a Pomodoro timer.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo: "As a user I want to be able to pause the timer.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo: "As a user I want to be able to reset the timer.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo:
             "As a user I want to know how many pomodoros have been completed for a selected task.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo:
             "As a user I want to be able to take a 5 min break after a Pomodoro.",
-          count: 0
+          count: 0,
+          complete: false
         },
         {
           todo:
             "As a user I want to be able to take a 20 min break after 4 pomodoros.",
-          count: 0
+          count: 0,
+          complete: false
         }
       ];
     },
@@ -279,18 +289,10 @@ export default {
         this.clients.push(this.editedItem);
       }
       this.close();
-    }
+    },
   }
 };
 </script>
 
 <style>
-v-container {
-  background-color: #666 !important;
-}
-.test {
-  border-radius: 0;
-  background: linear-gradient(145deg, #5bc6ff, #4da7db);
-  box-shadow: 5px 5px 14px #479aca, -5px -5px 14px #63d8ff;
-}
 </style>

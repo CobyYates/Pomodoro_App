@@ -17,6 +17,8 @@ import Main from './components/Main';
 
 export default {
   name: 'App',
+  computed: {
+  },
 
   components: {
     Main,
