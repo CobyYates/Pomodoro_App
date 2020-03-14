@@ -72,7 +72,7 @@
         </v-dialog>
         <v-data-table
           :headers="headers"
-          :items="clients"
+          :items="pomos"
           :sort-by="['approval']"
           :sort-desc="[true, false]"
           :hide-default-footer="true"
@@ -120,10 +120,10 @@ export default {
     headers: [
       { text: "", value: `checkbox`, sortable: false },
       { text: "Todo", value: "todo", sortable: false },
-      { text: "Count", value: "count", sortable: false },
+      { text: "Pomodoro's", value: "count", sortable: false },
       { text: "Actions", value: "action", sortable: false }
     ],
-    clients: [],
+    pomos: [],
     editedIndex: -1,
     dateTime: null,
     editedItem: {
@@ -219,7 +219,7 @@ export default {
       return !!this.timer;
     },
     initialize() {
-      this.clients = [
+      this.pomos = [
         {
           todo: "As a user I want to be able to add and remove tasks.",
           count: 0,
@@ -262,14 +262,14 @@ export default {
       ];
     },
     editItem(item) {
-      this.editedIndex = this.clients.indexOf(item);
+      this.editedIndex = this.pomos.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
     deleteItem(item) {
-      const index = this.clients.indexOf(item);
+      const index = this.pomos.indexOf(item);
       confirm("Are you sure you want to delete this task?") &&
-        this.clients.splice(index, 1);
+        this.pomos.splice(index, 1);
     },
     addLabel(label) {
       this.item.label.push(label);
@@ -284,9 +284,9 @@ export default {
     save(test) {
       this.editedItem.approval = test;
       if (this.editedIndex > -1) {
-        Object.assign(this.clients[this.editedIndex], this.editedItem);
+        Object.assign(this.pomos[this.editedIndex], this.editedItem);
       } else {
-        this.clients.push(this.editedItem);
+        this.pomos.push(this.editedItem);
       }
       this.close();
     },
