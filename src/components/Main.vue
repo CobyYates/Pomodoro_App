@@ -1,8 +1,17 @@
 <template>
   <v-container fluid class="text-center pt-0 ml-auto mr-auto">
-    <h1 class="text-center pt-6 mb-0 pb-0 font-weight-light">Pomodoro Tasks</h1>
-    <p class="mt-0 pt-0">Completed Pomodoros today {{this.$store.state.totalPomodoros}}</p>
-    <div>
+    <h1 class="text-center pt-6 mb-10 pb-0 display-2 font-weight-light">
+      P<v-icon large color="red darken-3">mdi-progress-clock</v-icon>modoro Tasks
+    </h1>
+    <v-row>
+      <v-col background-color="red">
+        <p class="mt-0 pt-0 display-1">Total</p>
+        <p class="mt-0 pt-0 display-1">Tasks</p>
+        <p class="mt-0 pt-0 display-2">{{this.$store.state.pomos.length}}</p>
+      </v-col>
+      <v-divider vertical color="green"></v-divider>
+      <v-col>
+        <div>
       <section id="app" class="hero is-info is-fullheight is-bold">
         <div class="hero-body">
           <div class="container has-text-centered">
@@ -29,7 +38,7 @@
               </button>
 
               <button id="reset" class="mx-3 my-3" @click="reset()">
-                <v-icon x-large color="orange">mdi-undo-variant</v-icon>
+                <v-icon x-large color="orange darken-2">mdi-undo-variant</v-icon>
               </button>
 
               <button id="reset" class="mx-3 my-3" @click="complete()">
@@ -40,8 +49,19 @@
         </div>
       </section>
     </div>
+      </v-col>
+      <v-divider vertical color="green"></v-divider>
+      <v-col>
+        <p class="mt-0 pt-0 display-1">Pomodoros</p>
+        <p class="mt-0 pt-0 display-1">Today</p>
+        <p class="mt-0 pt-0 display-2">{{this.$store.state.totalPomodoros}}</p>
+      </v-col>
+    </v-row>    
+    
+    
     <v-row>
       <v-col cols="12">
+        
         <v-dialog v-model="dialog" max-width="500px" persistent>
           <template v-slot:activator="{ on }">
             <v-btn dark x-large class="mb-2 elevation-6" color="primary" width="150" v-on="on">
