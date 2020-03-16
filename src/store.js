@@ -7,6 +7,7 @@ export default new Vuex.Store({
     state: {
         pomodoroCount: 0,
         totalPomodoros: 0,
+        activePomo: null,
         pomos: [
         {
           todo: "As a user I want to be able to add and remove tasks.",

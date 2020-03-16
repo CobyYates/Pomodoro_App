@@ -1,17 +1,18 @@
 <template>
-  <v-container class="text-center pt-0">
+  <v-container fluid class="text-center pt-0 ml-auto mr-auto">
     <h1 class="text-center pt-6 mb-0 pb-0 font-weight-light">Pomodoro Tasks</h1>
     <p class="mt-0 pt-0">Completed Pomodoros today {{this.$store.state.totalPomodoros}}</p>
     <div>
       <section id="app" class="hero is-info is-fullheight is-bold">
         <div class="hero-body">
           <div class="container has-text-centered">
+            <span id="type" class="display-1"> {{ getType() }}</span>
             <div id="timer" class="display-3 font-weight-regular">
               <span id="minutes">{{ getMinutes() }}</span>
               <span id="middle">:</span>
               <span id="seconds">{{ getSeconds() }}</span>
             </div>
-            <span id="type" class="display-1"> {{ getType() }}</span>
+            
 
             <div id="buttons" width="200px">
               <button
@@ -76,10 +77,10 @@
           :items="pomos"
           :sort-by="['approval']"
           :sort-desc="[true, false]"
-          class="elevation-3 mx-12 my-6 pl-0 ml-0"
+          class="elevation-10 my-6 pl-0 ml-4 mr-4"
         >
           <template v-slot:item.checkbox="{ item }">
-            <v-btn color="success" @click="playPause(item.count)"
+            <v-btn color="success" @click="playPause(item)"
               >Start {{ item.start }}</v-btn
             >
           </template>
@@ -157,9 +158,13 @@ export default {
     getType() {
       return this.pomodoro ? "Task" : "Break";
     },
-    playPause() {
+    playPause(item) {
+      // console.log(`Count: ${item.count} | ID: ${item}`)
+      // console.log(item)
+      this.$store.state.activePomo = this.pomos.indexOf(item)
+      console.log(this.$store.state.activePomo)
       if (!this.timer) {
-        this.play();
+        this.play(item.count);
       } else {
         this.pause();
       }
@@ -186,19 +191,17 @@ export default {
       if(!this.pomodoro) {
         this.$store.state.pomodoroCount++
         this.$store.state.totalPomodoros++
+        this.$store.state.pomos[`${this.$store.state.activePomo}`].count++
       }
       if (this.$store.state.pomodoroCount === 4) {
         this.time = 60 * 20;
         this.$store.state.pomodoroCount = 0;
-        console.log(this.pomodoro);
       } else {
         this.pomodoro
           ? (this.time = this.defaultTime)
           : (this.time = this.defaultBreak)
-        console.log(this.pomodoro);
       }
-      this.playPause();
-      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
+      // this.playPause();
     },
     getPlayState() {
       return !!this.timer;
@@ -227,8 +230,7 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-    save(test) {
-      this.editedItem.approval = test;
+    save() {
       if (this.editedIndex > -1) {
         Object.assign(this.pomos[this.editedIndex], this.editedItem);
       } else {
@@ -241,4 +243,10 @@ export default {
 </script>
 
 <style>
+.v-data-table-header {
+  background-color: #666!important;
+}
+.v-data-table-header span {
+  color: rgb(233, 233, 233)!important;
+}
 </style>

@@ -7,7 +7,7 @@
     </v-app-bar>
 
     <v-content>
-      <Main/>
+      <Main class="ml-auto mr-auto"/>
     </v-content>
   </v-app>
 </template>
