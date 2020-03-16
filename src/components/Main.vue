@@ -56,8 +56,9 @@
               <v-row>
                 <v-col cols="12" sm="12" md="12">
                   <v-textarea
+                  solo
                     v-model="editedItem.todo"
-                    label="Task"
+                    label="Pomodoro"
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -66,7 +67,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" @click="save" dark>Update</v-btn>
+              <v-btn color="blue darken-1" @click="save" dark>Update List</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -75,7 +76,6 @@
           :items="pomos"
           :sort-by="['approval']"
           :sort-desc="[true, false]"
-          :hide-default-footer="true"
           class="elevation-3 mx-12 my-6 pl-0 ml-0"
         >
           <template v-slot:item.checkbox="{ item }">
@@ -86,14 +86,14 @@
 
           <template v-slot:item.action="{ item }">
             <v-icon
-              small
-              class="mr-5 title"
+              medium
+              class="mr-5"
               @click="editItem(item)"
               color="blue"
             >
               mdi-pencil-outline
             </v-icon>
-            <v-icon small class="title" @click="deleteItem(item)" color="red">
+            <v-icon medium @click="deleteItem(item)" color="red">
               mdi-trash-can-outline
             </v-icon>
           </template>
@@ -117,28 +117,24 @@ export default {
     time: 0,
     completeTime: 0,
     timer: null,
+    pomos: [],
+    editedIndex: -1,
+    dateTime: null,
     headers: [
-      { text: "", value: `checkbox`, sortable: false },
+      { text: "Start Task", value: `checkbox`, sortable: false },
       { text: "Todo", value: "todo", sortable: false },
       { text: "Pomodoro's", value: "count", sortable: false },
       { text: "Actions", value: "action", sortable: false }
     ],
-    pomos: [],
-    editedIndex: -1,
-    dateTime: null,
     editedItem: {
-      todo: ""
+      todo: "",
+      count: 0
     },
     defaultItem: {
       todo: "",
       count: 0
     }
   }),
-  computed: {
-    formTitle() {
-      return this.editedIndex === "Approve client";
-    }
-  },
   watch: {
     dialog(val) {
       val || this.close();
@@ -162,7 +158,6 @@ export default {
       return this.pomodoro ? "Task" : "Break";
     },
     playPause() {
-      // console.log(`ID ${id}`);
       if (!this.timer) {
         this.play();
       } else {
@@ -181,7 +176,7 @@ export default {
       this.timer = null;
     },
     reset() {
-      this.break
+      !this.pomodoro
         ? (this.time = this.defaultBreak)
         : (this.time = this.defaultTime)
         this.playPause();
@@ -193,7 +188,6 @@ export default {
         this.$store.state.totalPomodoros++
       }
       if (this.$store.state.pomodoroCount === 4) {
-        // this.playPause();
         this.time = 60 * 20;
         this.$store.state.pomodoroCount = 0;
         console.log(this.pomodoro);
@@ -201,65 +195,17 @@ export default {
         this.pomodoro
           ? (this.time = this.defaultTime)
           : (this.time = this.defaultBreak)
-          // this.playPause();
         console.log(this.pomodoro);
       }
       this.playPause();
       console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
     },
-    addBreak() {
-      // this.time = this.defaultBreak
-      // this.$store.state.pomodoroCount++
-      console.log(`PomodoroCount ${this.$store.state.pomodoroCount}`);
-    },
-    startBreak() {
-      // this.time = this.defaultBreak
-    },
     getPlayState() {
       return !!this.timer;
     },
+    // get data from the store
     initialize() {
-      this.pomos = [
-        {
-          todo: "As a user I want to be able to add and remove tasks.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo:
-            "As a user I want to be able to select a task and start a Pomodoro timer.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo: "As a user I want to be able to pause the timer.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo: "As a user I want to be able to reset the timer.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo:
-            "As a user I want to know how many pomodoros have been completed for a selected task.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo:
-            "As a user I want to be able to take a 5 min break after a Pomodoro.",
-          count: 0,
-          complete: false
-        },
-        {
-          todo:
-            "As a user I want to be able to take a 20 min break after 4 pomodoros.",
-          count: 0,
-          complete: false
-        }
-      ];
+      this.pomos = this.$store.state.pomos
     },
     editItem(item) {
       this.editedIndex = this.pomos.indexOf(item);

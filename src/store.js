@@ -7,6 +7,47 @@ export default new Vuex.Store({
     state: {
         pomodoroCount: 0,
         totalPomodoros: 0,
+        pomos: [
+        {
+          todo: "As a user I want to be able to add and remove tasks.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo:
+            "As a user I want to be able to select a task and start a Pomodoro timer.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo: "As a user I want to be able to pause the timer.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo: "As a user I want to be able to reset the timer.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo:
+            "As a user I want to know how many pomodoros have been completed for a selected task.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo:
+            "As a user I want to be able to take a 5 min break after a Pomodoro.",
+          count: 0,
+          complete: false
+        },
+        {
+          todo:
+            "As a user I want to be able to take a 20 min break after 4 pomodoros.",
+          count: 0,
+          complete: false
+        }
+      ]
     },
     getters: {
 
