@@ -80,9 +80,11 @@
           class="elevation-10 my-6 pl-0 ml-4 mr-4"
         >
           <template v-slot:item.checkbox="{ item }">
-            <v-btn color="success" @click="playPause(item)"
-              >Start {{ item.start }}</v-btn
-            >
+            <v-btn 
+              color="success" 
+              @click="playPause(item)">
+                Start {{ item.start }}
+            </v-btn>
           </template>
 
           <template v-slot:item.action="{ item }">
@@ -201,7 +203,7 @@ export default {
           ? (this.time = this.defaultTime)
           : (this.time = this.defaultBreak)
       }
-      // this.playPause();
+      this.pause()
     },
     getPlayState() {
       return !!this.timer;

@@ -19,11 +19,11 @@
 
 # Requirements
 - As a user I want to be able to add and remove tasks                                   DONE
-- As a user I want to be able to select a task and start a Pomodoro timer               SORTA
+- As a user I want to be able to select a task and start a Pomodoro timer               DONE
 - As a user I want to be able to pause the timer                                        DONE
 - As a user I want to be able to reset the timer                                        DONE
-- As a user I want to know how many pomodoros have been completed for a selected task   
+- As a user I want to know how many pomodoros have been completed for a selected task   DONE
 - As a user I want to be able to take a 5 min break after a Pomodoro                    DONE
 - As a user I want to be able to take a 20 min break after 4 pomodoros                  DONE
-- As a user I want to know how many pomodoros I have worked for task                    
+- As a user I want to know how many pomodoros I have worked for task                    DONE
 - As a user I want to know how many total pomodoros I have competed.                    DONE
